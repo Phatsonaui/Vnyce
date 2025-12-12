@@ -1,6 +1,21 @@
 <?php
 // customer_list.php
-// This file displays a list of customers in the admin panel
+
+function DateThai($strDate)
+{
+    $date = strtotime($strDate);
+    $day = date("j", $date);
+    $month = date("n", $date);
+    $year = date("Y", $date) + 543; // Convert to Buddhist Era
+
+    // Thai month names
+    $monthNames = ["", "มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน", "กรกฎาคม", "สิงหาคม", "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม"];
+
+    // Format the date string
+    $formattedDate = $day . " " . $monthNames[$month] . " " . $year;
+
+    return $formattedDate;
+}
 ?>
 
 <style>
@@ -275,7 +290,6 @@
         color: var(--primary) !important;
     }
 </style>
-
 <div class="container-fluid">
     <!-- Page Header -->
     <div class="page-header">
@@ -299,6 +313,7 @@
                             <th width="5%">#</th>
                             <th width="15%">รหัสลูกค้า</th>
                             <th width="40%">ชื่อ-นามสกุล</th>
+                            <th width="15%">วันเกิด</th>
                             <th width="15%">สถานะ</th>
                             <th width="15%" class="text-center">จัดการ</th>
                         </tr>
@@ -333,6 +348,9 @@
                                     <div style="font-weight: 500;">
                                         <?php echo htmlspecialchars($user['v_fname'] . ' ' . $user['v_lname']); ?>
                                     </div>
+                                </td>
+                                <td>
+                                    <?php echo DateThai($user['v_birth']); ?>
                                 </td>
                                 <td>
                                     <span class="status-badge <?php echo $statusClass; ?>">
