@@ -381,6 +381,127 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Birthday Section -->
+            <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-200 animate-fade-in" style="animation-delay: 0.75s;">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">
+                    <i class="bi bi-cake2-fill mr-2" style="color: var(--primary);"></i>
+                    วันเกิดที่ใกล้จะถึง
+                </h3>
+                <div class="space-y-3" id="birthdayList">
+                    <?php
+                    // ดึงข้อมูลลูกค้าที่มีวันเกิดในเดือนนี้และเดือนหน้า
+                    $dbBirthday = new Database('u507667907_Vnyce');
+                    $dbBirthday->Table = "V_User";
+
+                    // คำนวณวันที่ 30 วันข้างหน้า
+                    $today = date('Y-m-d');
+                    $next30Days = date('Y-m-d', strtotime('+30 days'));
+
+                    // ดึงข้อมูลทั้งหมดแล้วกรองด้วย PHP เพราะ MySQL DATE ไม่สามารถเปรียบเทียบเฉพาะเดือน-วันได้โดยตรง
+                    $dbBirthday->Where = "WHERE v_status = '02' AND v_birth IS NOT NULL AND v_birth != '0000-00-00' ORDER BY v_birth ASC";
+                    $allUsers = $dbBirthday->Select();
+
+                    $birthdayUsers = [];
+                    $currentYear = date('Y');
+
+                    foreach ($allUsers as $user) {
+                        if (empty($user['v_birth']) || $user['v_birth'] === '0000-00-00') continue;
+
+                        // แปลงวันเกิดให้เป็นปีปัจจุบัน
+                        $birthDate = new DateTime($user['v_birth']);
+                        $birthThisYear = new DateTime($currentYear . '-' . $birthDate->format('m-d'));
+                        $now = new DateTime();
+
+                        // ถ้าวันเกิดในปีนี้ผ่านไปแล้ว ให้ใช้ปีหน้า
+                        if ($birthThisYear < $now) {
+                            $birthThisYear = new DateTime(($currentYear + 1) . '-' . $birthDate->format('m-d'));
+                        }
+
+                        // คำนวณจำนวนวันจนถึงวันเกิด
+                        $interval = $now->diff($birthThisYear);
+                        $daysUntil = $interval->days;
+
+                        // เอาเฉพาะที่ใกล้ภายใน 30 วัน
+                        if ($daysUntil <= 30) {
+                            $user['days_until'] = $daysUntil;
+                            $user['birth_this_year'] = $birthThisYear->format('Y-m-d');
+                            $birthdayUsers[] = $user;
+                        }
+                    }
+
+                    // เรียงตามวันที่ใกล้ที่สุด
+                    usort($birthdayUsers, function ($a, $b) {
+                        return $a['days_until'] - $b['days_until'];
+                    });
+
+                    // แสดงแค่ 5 คนแรก
+                    $birthdayUsers = array_slice($birthdayUsers, 0, 5);
+
+                    if (count($birthdayUsers) > 0) {
+                        foreach ($birthdayUsers as $user) {
+                            $prefix = ['01' => 'นาย', '02' => 'นาง', '03' => 'นางสาว'][$user['v_prefix']] ?? '';
+                            $fullName = $prefix . ' ' . $user['v_fname'] . ' ' . $user['v_lname'];
+                            $daysUntil = $user['days_until'];
+
+                            // คำนวณอายุ
+                            $birthDate = new DateTime($user['v_birth']);
+                            $now = new DateTime();
+                            $age = $now->diff($birthDate)->y + 1; // +1 เพราะจะครบอายุในวันเกิดปีนี้
+
+                            // กำหนดสีและไอคอนตามจำนวนวัน
+                            if ($daysUntil == 0) {
+                                $badgeClass = 'bg-red-100 text-red-700';
+                                $badgeText = 'วันนี้!';
+                                $icon = 'bi-gift-fill';
+                            } elseif ($daysUntil <= 7) {
+                                $badgeClass = 'bg-orange-100 text-orange-700';
+                                $badgeText = $daysUntil . ' วัน';
+                                $icon = 'bi-calendar-heart';
+                            } else {
+                                $badgeClass = 'bg-blue-100 text-blue-700';
+                                $badgeText = $daysUntil . ' วัน';
+                                $icon = 'bi-calendar-event';
+                            }
+
+                            // แสดงวันที่เกิด
+                            $birthDateFormatted = date('d/m', strtotime($user['birth_this_year']));
+                    ?>
+                            <div class="flex items-center justify-between p-3 rounded-lg hover:bg-gray-50 transition">
+                                <div class="flex items-center gap-3 flex-1">
+                                    <div class="w-10 h-10 rounded-full flex items-center justify-center text-white font-semibold"
+                                        style="background: linear-gradient(135deg, var(--primary), var(--primary-dark));">
+                                        <i class="<?php echo $icon; ?>"></i>
+                                    </div>
+                                    <div class="flex-1">
+                                        <div class="font-medium text-gray-800"><?php echo htmlspecialchars($fullName); ?></div>
+                                        <div class="text-xs text-gray-500">
+                                            <?php echo $birthDateFormatted; ?> (ครบ <?php echo $age; ?> ปี)
+                                        </div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <span class="px-3 py-1 rounded-full text-xs font-semibold <?php echo $badgeClass; ?>">
+                                        <?php echo $badgeText; ?>
+                                    </span>
+                                </div>
+                            </div>
+                    <?php
+                        }
+                    } else {
+                        echo '<p class="text-center text-gray-500 py-8">ไม่มีลูกค้าที่จะมีวันเกิดใน 30 วันนี้</p>';
+                    }
+                    ?>
+                </div>
+
+                <?php if (count($birthdayUsers) >= 1) { ?>
+                    <div class="mt-4 text-center">
+                        <button onclick="showAllBirthdays()" class="text-sm font-medium hover:underline" style="color: var(--primary);">
+                            ดูทั้งหมด <i class="bi bi-chevron-right"></i>
+                        </button>
+                    </div>
+                <?php } ?>
+            </div>
         </div>
 
         <!-- Recent Activities -->
@@ -440,6 +561,25 @@
                 </div>
             </div>
             <div id="modalContent" class="p-6 max-h-[70vh] overflow-y-auto"></div>
+        </div>
+    </div>
+
+    <!-- Birthday Modal -->
+    <div id="birthdayModal" class="fixed inset-0 z-50 flex items-center justify-center bg-opacity-40 hidden modal-backdrops">
+        <div class="bg-white rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-hidden animate-fade-in">
+            <div class="p-6 border-b border-gray-200" style="background: linear-gradient(135deg, var(--primary-light), var(--primary));">
+                <div class="flex items-center justify-between">
+                    <h2 class="text-2xl font-bold text-white">
+                        <i class="bi bi-cake2-fill mr-2"></i>วันเกิดลูกค้าทั้งหมด
+                    </h2>
+                    <button onclick="closeBirthdayModal()" class="w-10 h-10 bg-white rounded-full flex items-center justify-center hover:bg-gray-100 transition">
+                        <i class="bi bi-x-lg text-gray-600"></i>
+                    </button>
+                </div>
+            </div>
+            <div id="birthdayModalContent" class="p-6 max-h-[70vh] overflow-y-auto">
+                <!-- Content will be loaded here -->
+            </div>
         </div>
     </div>
 
@@ -594,6 +734,93 @@
             document.body.style.overflow = 'auto';
             currentProgram = null;
         }
+
+        // Birthday Modal Functions
+        function showAllBirthdays() {
+            const modal = document.getElementById('birthdayModal');
+            const content = document.getElementById('birthdayModalContent');
+
+            // Show loading
+            content.innerHTML = '<div class="text-center py-12"><i class="bi bi-hourglass-split text-4xl text-gray-400 animate-spin"></i></div>';
+            modal.classList.remove('hidden');
+
+            // Load all birthdays via AJAX
+            fetch('../config/get_all_birthdays.php')
+                .then(response => response.text())
+                .then(data => {
+                    content.innerHTML = data;
+                })
+                .catch(error => {
+                    content.innerHTML = '<p class="text-center text-red-500">เกิดข้อผิดพลาดในการโหลดข้อมูล</p>';
+                });
+        }
+
+        function closeBirthdayModal() {
+            document.getElementById('birthdayModal').classList.add('hidden');
+        }
+
+        // Send birthday wishes
+        function sendBirthdayWish(customerId, customerName) {
+            Swal.fire({
+                title: 'ส่งคำอวยพร',
+                html: `
+            <p class="mb-4">ส่งคำอวยพรวันเกิดให้ ${customerName}</p>
+            <textarea id="wishMessage" class="w-full p-3 border rounded-lg" rows="4" placeholder="พิมพ์คำอวยพร...">สุขสันต์วันเกิด! 🎂🎉
+ขอให้มีความสุข สุขภาพแข็งแรง และประสบความสำเร็จในทุกๆ ด้าน
+ขอบคุณที่ไว้วางใจ V'nyce Clinic 💕</textarea>
+        `,
+                showCancelButton: true,
+                confirmButtonText: '<i class="bi bi-send-fill"></i> ส่งคำอวยพร',
+                cancelButtonText: 'ยกเลิก',
+                confirmButtonColor: '#BA9A8B',
+                cancelButtonColor: '#6b7280',
+                preConfirm: () => {
+                    const message = document.getElementById('wishMessage').value;
+                    if (!message) {
+                        Swal.showValidationMessage('กรุณาพิมพ์คำอวยพร');
+                        return false;
+                    }
+                    return {
+                        message
+                    };
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Send wish via AJAX
+                    fetch('../config/send_birthday_wish.php', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/x-www-form-urlencoded',
+                            },
+                            body: `customer_id=${customerId}&message=${encodeURIComponent(result.value.message)}`
+                        })
+                        .then(response => response.text())
+                        .then(data => {
+                            if (data === 'success') {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'ส่งคำอวยพรสำเร็จ!',
+                                    confirmButtonColor: '#BA9A8B'
+                                });
+                            } else {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'เกิดข้อผิดพลาด',
+                                    text: data,
+                                    confirmButtonColor: '#BA9A8B'
+                                });
+                            }
+                        });
+                }
+            });
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('birthdayModal')?.addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeBirthdayModal();
+            }
+        });
     </script>
 </body>
 

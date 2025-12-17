@@ -94,7 +94,7 @@
                 <div class="service-icon">
                     <i class="fas fa-cut"></i>
                 </div>
-                <h3 itemprop="name">ลดสิวและรอยสิว</h3>
+                <h3 itemprop="name">กดลดสิวและรอยสิว</h3>
                 <p itemprop="description">เทคโนโลยีรักษาสิวอักเสบ ควบคุมความมัน และลดรอยแดง ด้วยเลเซอร์และสารสกัดจากธรรมชาติ</p>
                 <button class="cta-button service-detail-btn" data-service="acne-treatment" aria-label="เรียนรู้เพิ่มเติมเกี่ยวกับบริการลดสิว">เรียนรู้เพิ่มเติม</button>
             </article>
@@ -103,14 +103,14 @@
                 <div class="service-icon">
                     <i class="fas fa-syringe"></i>
                 </div>
-                <h3 itemprop="name">ฉีดผิวขาว</h3>
+                <h3 itemprop="name">วิตามินผิวกาย</h3>
                 <p itemprop="description">สูตรพิเศษสำหรับผิวขาวกระจ่างใสอย่างปลอดภัยและเห็นผล วิตามินเข้มข้นที่ช่วยฟื้นฟูผิวจากภายใน</p>
                 <button class="cta-button service-detail-btn" data-service="whitening" aria-label="เรียนรู้เพิ่มเติมเกี่ยวกับบริการฉีดผิวขาว">เรียนรู้เพิ่มเติม</button>
             </article>
 
             <article class="service-card" itemscope itemtype="https://schema.org/Service">
                 <div class="service-icon">
-                    <i class="fas fa-laser"></i>
+                    <i class="fa-solid fa-crosshairs"></i>
                 </div>
                 <h3 itemprop="name">เลเซอร์กำจัดขน</h3>
                 <p itemprop="description">เทคโนโลยีล่าสุดสำหรับกำจัดขนถาวร ไม่เจ็บ ไม่เป็นตุ่ม เห็นผลตั้งแต่ครั้งแรกที่ทำ</p>

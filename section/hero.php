@@ -85,7 +85,7 @@
         <div class="hero-text">
             <h1>เปล่งประกายความงาม ด้วยเทคโนโลยีระดับโลก</h1>
             <p>V'nyce Clinic ให้บริการดูแลผิวพรรณและความงามครบวงจร ด้วยทีมผู้เชี่ยวชาญและเทคโนโลยีทันสมัยที่ได้รับการรับรองจากมาตรฐานสากล</p>
-            <button class="cta-button" id="heroAppointmentBtn">นัดหมายวันนี้</button>
+            <button class="cta-button" id="heroAppointmentBtn">เริ่มต้นใช้บริการ</button>
         </div>
         <div class="hero-image">
             <img src="/img/V'NYCE.jpg"

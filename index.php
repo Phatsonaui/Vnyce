@@ -15,6 +15,208 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Font Awesome -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <style>
+    :root {
+      /* สีหลักของแบรนด์ */
+      --primary: #BA9A8B;
+      --primary-light: #D4BFB3;
+      --primary-dark: #9A7A6B;
+
+      /* สีพื้นหลัง */
+      --bg-body: #FFF1E8;
+      --bg-card: #FFFFFF;
+      --bg-accent: #F6E4D2;
+
+      /* สีตัวอักษร */
+      --text-dark: #4A3428;
+      --text-muted: #8B7968;
+
+      /* อื่นๆ */
+      --border-color: rgba(186, 154, 139, 0.2);
+      --sidebar-width: 260px;
+      --sidebar-collapsed: 70px;
+      --header-height: 64px;
+
+      /* เงา */
+      --shadow-sm: 0 1px 3px rgba(186, 154, 139, 0.1);
+      --shadow-md: 0 4px 6px -1px rgba(186, 154, 139, 0.15);
+      --shadow-lg: 0 10px 15px -3px rgba(186, 154, 139, 0.2);
+    }
+
+    /* ==================== FORM SECTIONS ==================== */
+    .form-section {
+      margin-bottom: 32px;
+    }
+
+    .form-section:last-child {
+      margin-bottom: 0;
+    }
+
+    .section-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--text-dark);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .section-title i {
+      color: var(--primary);
+      font-size: 20px;
+    }
+
+    /* ==================== FORM GROUPS ==================== */
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-dark);
+      margin-bottom: 8px;
+    }
+
+    .required {
+      color: var(--error);
+      margin-left: 4px;
+    }
+
+    /* ==================== INPUTS ==================== */
+    .form-input,
+    .form-select,
+    .form-textarea {
+      width: 100%;
+      padding: 14px 16px;
+      border: 2px solid var(--border-color);
+      border-radius: 12px;
+      font-size: 15px;
+      font-family: 'Prompt', sans-serif;
+      color: var(--text-dark);
+      background: white;
+      transition: all 0.3s ease;
+    }
+
+    .form-input:focus,
+    .form-select:focus,
+    .form-textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 4px rgba(186, 154, 139, 0.1);
+      transform: translateY(-2px);
+    }
+
+    .form-input::placeholder {
+      color: var(--text-muted);
+    }
+
+    .form-textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+
+    /* Input with Icon */
+    .input-group {
+      position: relative;
+    }
+
+    .input-icon {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+      font-size: 18px;
+      pointer-events: none;
+      transition: color 0.3s ease;
+    }
+
+    .input-group .form-input,
+    .input-group .form-select {
+      padding-left: 48px;
+    }
+
+    .input-group .form-input:focus~.input-icon,
+    .input-group .form-select:focus~.input-icon {
+      color: var(--primary);
+    }
+
+    /* ==================== GRID LAYOUT ==================== */
+    .form-grid {
+      display: grid;
+      gap: 20px;
+    }
+
+    .form-grid-2 {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    /* ==================== INFO BOX ==================== */
+    .info-box {
+      background: linear-gradient(135deg, var(--bg-accent) 0%, #fff 100%);
+      border-left: 4px solid var(--primary);
+      padding: 16px;
+      border-radius: 12px;
+      margin-bottom: 24px;
+      display: flex;
+      gap: 12px;
+      align-items: start;
+    }
+
+    .info-box i {
+      color: var(--primary);
+      font-size: 24px;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .info-box-content p {
+      color: var(--text-dark);
+      font-size: 14px;
+      line-height: 1.6;
+      margin-bottom: 8px;
+    }
+
+    .info-box-content p:last-child {
+      margin-bottom: 0;
+    }
+
+    /* ==================== CHECKBOX ==================== */
+    .checkbox-wrapper {
+      display: flex;
+      align-items: start;
+      gap: 12px;
+      cursor: pointer;
+    }
+
+    .checkbox-wrapper input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
+      border: 2px solid var(--border-color);
+      border-radius: 6px;
+      cursor: pointer;
+      flex-shrink: 0;
+      margin-top: 2px;
+      transition: all 0.3s ease;
+    }
+
+    .checkbox-wrapper input[type="checkbox"]:checked {
+      background: var(--primary);
+      border-color: var(--primary);
+    }
+
+    .checkbox-wrapper label {
+      font-size: 14px;
+      color: var(--text-dark);
+      cursor: pointer;
+      margin: 0;
+    }
+  </style>
 </head>
 
 <body class="bg-gradient-to-br from-amber-50 to-stone-100 min-h-screen">
@@ -23,7 +225,7 @@
   <div id="messaged" class="fixed top-4 right-4 z-50 flex flex-col gap-3"></div>
 
   <div class="flex items-center justify-center min-h-screen p-4">
-    <div class="bg-white rounded-2xl shadow-xl p-8 w-full max-w-md">
+    <div class="bg-white rounded-2xl shadow-xl p-8 w-full max-w-2xl">
 
       <!-- Logo -->
       <div class="text-center mb-8">
@@ -69,7 +271,93 @@
 
       <!-- Register Form -->
       <div id="registerForm" class="hidden">
-        <div class="space-y-4">
+        <div class="form-section">
+          <h3 class="section-title">
+            <i class="fas fa-user"></i>
+            ข้อมูลส่วนตัว
+          </h3>
+
+          <div class="form-group">
+            <label for="regPrefix">คำนำหน้า <span class="required" style="color: red;">*</span></label>
+            <div class="input-group">
+              <select id="regPrefix" name="regPrefix" class="form-select" required aria-required="true">
+                <option value="">เลือกคำนำหน้า</option>
+                <option value="01">นาย</option>
+                <option value="02">นาง</option>
+                <option value="03">นางสาว</option>
+              </select>
+              <i class="input-icon fas fa-user"></i>
+            </div>
+          </div>
+          <div class="form-grid form-grid-2">
+            <div class="form-group">
+              <label for="regFirstName">ชื่อ <span class="required" style="color: red;">*</span></label>
+              <div class="input-group">
+                <input type="text" id="regFirstName" name="regFirstName" class="form-input" required
+                  placeholder="กรอกชื่อ"
+                  aria-required="true">
+                <i class="input-icon fas fa-user"></i>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="regLastName">นามสกุล <span class="required" style="color: red;">*</span></label>
+              <div class="input-group">
+                <input type="text" id="regLastName" name="regLastName" class="form-input" required
+                  placeholder="กรอกนามสกุล"
+                  aria-required="true">
+                <i class="input-icon fas fa-user"></i>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-grid form-grid-2">
+            <div class="form-group">
+              <label for="regPhone">เบอร์โทรศัพท์ <span class="required" style="color: red;">*</span></label>
+              <div class="input-group">
+                <input type="tel"
+                  id="regPhone"
+                  name="regPhone"
+                  class="form-input"
+                  placeholder="0XX-XXX-XXXX"
+                  pattern="[0-9]{10}"
+                  required
+                  aria-required="true">
+                <i class="input-icon fas fa-phone"></i>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="regEmail">อีเมล</label>
+              <div class="input-group">
+                <input type="email"
+                  id="regEmail"
+                  name="regEmail"
+                  class="form-input"
+                  placeholder="example@email.com">
+                <i class="input-icon fas fa-envelope"></i>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="regBirthDate">วันเกิด <span style="color: red;" class="required">*</span></label>
+            <div class="input-group">
+              <input type="date"
+                id="regBirthDate"
+                name="regBirthDate"
+                class="form-input"
+                required
+                aria-required="true">
+              <i class="input-icon fas fa-calendar"></i>
+            </div>
+          </div>
+          <button type="submit" id="registerBtn" class="btn btn-primary">
+            <i class="fas fa-check"></i>
+            สมัครสมาชิก
+          </button>
+        </div>
+
+        <!-- <div class="space-y-4">
           <div class="grid grid-cols-3 gap-3">
             <div class="col-span-1">
               <label class="block text-sm font-medium text-gray-700 mb-2">คำนำหน้า</label>
@@ -116,18 +404,11 @@
               placeholder="your@email.com">
           </div>
 
-          <!-- <div>
-              <label class="block text-sm font-medium text-gray-700 mb-2">รหัสผ่าน</label>
-              <input type="password" id="regPassword" required minlength="6"
-                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none"
-                placeholder="••••••••">
-            </div> -->
-
           <button type="submit" id="registerBtn"
             class="w-full bg-pink-600 text-white py-3 rounded-lg font-medium hover:bg-pink-700 transition transform hover:scale-105 active:scale-95">
             สมัครสมาชิก
           </button>
-        </div>
+        </div> -->
       </div>
     </div>
   </div>

@@ -106,11 +106,21 @@ if (appointmentModal) {
   });
 }
 
-// ==================== Appointment Form Submission ====================
+// ==================== Member Registration Form Submission ====================
 const appointmentForm = document.getElementById("appointmentForm");
 if (appointmentForm) {
   appointmentForm.addEventListener("submit", function (e) {
     e.preventDefault();
+
+    // Validate phone number
+    const phoneInput = document.getElementById("phone");
+    const phone = phoneInput.value.replace(/\D/g, "");
+
+    if (phone.length !== 10) {
+      alert("กรุณากรอกเบอร์โทรศัพท์ 10 หลัก");
+      phoneInput.focus();
+      return;
+    }
 
     // Get form data
     const formData = new FormData(appointmentForm);
@@ -119,31 +129,88 @@ if (appointmentForm) {
     // Show loading
     const submitBtn = appointmentForm.querySelector('button[type="submit"]');
     const originalText = submitBtn.innerHTML;
-    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> กำลังส่ง...';
+    submitBtn.innerHTML =
+      '<i class="fas fa-spinner fa-spin"></i> กำลังสมัคร...';
     submitBtn.disabled = true;
 
-    // Simulate API call (replace with actual API endpoint)
-    setTimeout(() => {
-      // Success
-      alert(
-        "ขอบคุณสำหรับการนัดหมาย!\n\nเราจะติดต่อกลับไปภายใน 24 ชั่วโมง\nหรือโทรเลย: 093-895-5999"
-      );
-      closeAppointmentModal();
-      appointmentForm.reset();
+    // Send to backend
+    fetch("../config/ctrl_register.php", {
+      method: "POST",
+      body: formData,
+    })
+      .then((response) => response.json())
+      .then((result) => {
+        submitBtn.innerHTML = originalText;
+        submitBtn.disabled = false;
 
-      // Reset button
-      submitBtn.innerHTML = originalText;
-      submitBtn.disabled = false;
+        if (result.status === "success") {
+          // Show success message
+          document.getElementById("successMessage").classList.add("show");
+          appointmentForm.style.display = "none";
 
-      // Send to analytics (if you use GA4)
-      if (typeof gtag !== "undefined") {
-        gtag("event", "appointment_submit", {
-          service: data.service,
-          date: data.date,
-        });
-      }
-    }, 1500);
+          // Send to analytics
+          if (typeof gtag !== "undefined") {
+            gtag("event", "member_registration", {
+              service: data.service,
+              method: "website_form",
+            });
+          }
+
+          // Redirect after 3 seconds
+          setTimeout(() => {
+            closeAppointmentModal();
+            window.location.href = "/index.php?registered=1&tel=" + data.phone;
+          }, 3000);
+        } else {
+          alert(
+            "เกิดข้อผิดพลาด: " + (result.message || "กรุณาลองใหม่อีกครั้ง")
+          );
+        }
+      })
+      .catch((error) => {
+        submitBtn.innerHTML = originalText;
+        submitBtn.disabled = false;
+        console.error("Error:", error);
+        alert("เกิดข้อผิดพลาดในการเชื่อมต่อ กรุณาลองใหม่อีกครั้ง");
+      });
   });
+
+  // Real-time phone validation
+  const phoneInput = document.getElementById("phone");
+  if (phoneInput) {
+    phoneInput.addEventListener("input", function (e) {
+      // Remove non-numeric characters
+      this.value = this.value.replace(/\D/g, "");
+
+      // Limit to 10 digits
+      if (this.value.length > 10) {
+        this.value = this.value.slice(0, 10);
+      }
+
+      // Visual feedback
+      if (this.value.length === 10) {
+        this.style.borderColor = "#10b981";
+      } else if (this.value.length > 0) {
+        this.style.borderColor = "#ef4444";
+      } else {
+        this.style.borderColor = "";
+      }
+    });
+  }
+
+  // Auto-fill service from CTA buttons
+  window.setServiceInModal = function (serviceName) {
+    const serviceSelect = document.getElementById("service");
+    if (serviceSelect) {
+      const options = serviceSelect.options;
+      for (let i = 0; i < options.length; i++) {
+        if (options[i].text.includes(serviceName)) {
+          serviceSelect.selectedIndex = i;
+          break;
+        }
+      }
+    }
+  };
 }
 
 // ==================== Service Detail Buttons ====================

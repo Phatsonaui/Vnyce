@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Header Component - Navigation และ Mobile Menu
  */
@@ -24,7 +25,7 @@
             </ul>
         </nav>
 
-        <button class="cta-button" id="appointmentBtn" aria-label="นัดหมายบริการ">นัดหมายวันนี้</button>
+        <button class="cta-button" id="appointmentBtn" aria-label="สมัครสมาชิก">สมัครสมาชิก</button>
 
         <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="เปิดเมนู" aria-expanded="false">
             <i class="fas fa-bars"></i>
@@ -41,7 +42,7 @@
             <li><a href="#promotions">โปรโมชั่น</a></li>
             <li><a href="#testimonials">รีวิว</a></li>
             <li><a href="#contact">ติดต่อเรา</a></li>
-            <li><a href="#" id="mobileAppointmentBtn">นัดหมายวันนี้</a></li>
+            <li><a href="#" id="mobileAppointmentBtn">สมัครสมาชิก</a></li>
         </ul>
     </div>
 </header>

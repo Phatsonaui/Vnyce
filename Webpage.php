@@ -36,16 +36,16 @@
     <?php include 'section/services.php'; ?>
 
     <!-- Pricing Section -->
-    <?php include 'section/pricing.php'; ?>
+    <!-- <?php include 'section/pricing.php'; ?> -->
 
     <!-- Promotions Section -->
-    <?php include 'section/promotions.php'; ?>
+    <!-- <?php include 'section/promotions.php'; ?> -->
 
     <!-- Gallery Section -->
     <?php include 'section/gallery.php'; ?>
 
     <!-- Stats Section -->
-    <?php include 'section/stats.php'; ?>
+    <!-- <?php include 'section/stats.php'; ?> -->
 
     <!-- Testimonials -->
     <?php include 'section/testimonials.php'; ?>
