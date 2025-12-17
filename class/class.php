@@ -1,10 +1,10 @@
 <?php
-if ($_SESSION['Database_V'] == "VaNYC2E_V5ER4bR7I0FIEeD") {
+if ($_SESSION['Database_V'] == "") {
 
-    define("DB_HOST", "localhost");
-    define("DB_NAME", "u507667907_Vnyce");
-    define("DB_USER", "u507667907_Vnyce");
-    define("DB_PASS", "Bila_14789");
+    define("DB_HOST", "");
+    define("DB_NAME", "");
+    define("DB_USER", "");
+    define("DB_PASS", "");
 
     class Database
     {
