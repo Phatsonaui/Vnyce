@@ -70,6 +70,6 @@ if ($_SESSION['Database_V'] == "VaNYC2E_V5ER4bR7I0FIEeD") {
         }
     }
 } else {
-    echo "Database connection error.";
+    echo "Database connection Error.";
     exit();
 }
